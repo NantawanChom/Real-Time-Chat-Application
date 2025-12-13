@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { type ReactNode } from 'react';
+import AuthPage from './pages/AuthPage';
+import './App.css';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import Dashboard from './pages/Dashboard';
 
 function App() {
-  const [count, setCount] = useState(0)
+  interface ProtectedRouteProps {
+    children: ReactNode;
+  }
+
+  const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+    const { isLoggedIn } = useAuth();
+    if (!isLoggedIn) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return <>{children}</>;
+  };
+
+  const AuthRedirect: React.FC<ProtectedRouteProps> = ({ children }) => {
+    const { isLoggedIn } = useAuth();
+    if (isLoggedIn) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    return <>{children}</>;
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={appContainerStyle}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <AuthRedirect>
+                <AuthPage />
+              </AuthRedirect>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route
+            path="*"
+            element={<h1 style={{ textAlign: 'center', marginTop: '100px' }}>404 Not Found</h1>}
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
-export default App
+const appContainerStyle: React.CSSProperties = {
+  width: '100%',
+  minHeight: '100vh',
+};
+
+export default App;
