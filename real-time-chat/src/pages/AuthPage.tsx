@@ -1,14 +1,17 @@
 import React, { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import AuthCard from '../components/AuthCard';
 import BrandLogo from '../components/BrandLogo';
 import AuthHeader from '../components/AuthHeader';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import InputField from '../ui/InputField';
 import Button from '../ui/Button';
 import ToggleLink from '../ui/ToggleLink';
 
 const AuthPage: React.FC = () => {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ const AuthPage: React.FC = () => {
     setError('');
 
     if (!email || !password || (!isLogin && !username)) {
-      setError('กรุณากรอกข้อมูลให้ครบถ้วน');
+      setError(t('auth.fillAllFields'));
       return;
     }
 
@@ -49,52 +52,54 @@ const AuthPage: React.FC = () => {
   return (
     <div style={pageStyles.background}>
       <AuthCard>
-        <BrandLogo size={50} color="#007bff" />
+        <LanguageSwitcher />
+        <BrandLogo size={50} color="#7b5a43" />
         <AuthHeader
-          title={isLogin ? 'ยินดีต้อนรับกลับมา' : 'เข้าร่วมกับเรา'}
-          subtitle={
-            isLogin ? 'กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ' : 'สร้างบัญชีใหม่ภายในไม่กี่วินาที'
-          }
+          title={isLogin ? t('auth.welcomeBack') : t('auth.joinUs')}
+          subtitle={isLogin ? t('auth.loginSubtitle') : t('auth.signupSubtitle')}
         />
         {error && <p style={pageStyles.errorText}>{error}</p>}
         <form onSubmit={handleSubmit} style={pageStyles.form}>
           {!isLogin && (
             <InputField
-              label="ชื่อผู้ใช้งาน"
+              label={t('auth.username')}
               type="text"
-              placeholder="กำหนดชื่อผู้ใช้งาน"
+              placeholder={t('auth.usernamePlaceholder')}
               value={username}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
               required
             />
           )}
           <InputField
-            label="อีเมล"
+            label={t('auth.email')}
             type="email"
-            placeholder="example@email.com"
+            placeholder={t('auth.emailPlaceholder')}
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             required
           />
 
           <InputField
-            label="รหัสผ่าน"
+            label={t('auth.password')}
             type="password"
-            placeholder="รหัสผ่านของคุณ"
+            placeholder={t('auth.passwordPlaceholder')}
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             required
           />
           <div style={pageStyles.buttonContainer}>
             <Button type="submit" fullWidth={true}>
-              {isLogin ? 'เข้าสู่ระบบ' : 'ลงทะเบียน'}
+              {isLogin ? t('auth.login') : t('auth.signup')}
             </Button>
           </div>
         </form>
 
         <div style={pageStyles.toggleText}>
-          {isLogin ? 'ยังไม่มีบัญชีใช่หรือไม่?' : 'เป็นสมาชิกอยู่แล้วใช่หรือไม่?'}
-          <ToggleLink text={isLogin ? ' ลงทะเบียน' : ' เข้าสู่ระบบ'} onClick={toggleForm} />
+          {isLogin ? t('auth.noAccount') : t('auth.haveAccount')}
+          <ToggleLink
+            text={isLogin ? ' ' + t('auth.signup') : ' ' + t('auth.login')}
+            onClick={toggleForm}
+          />
         </div>
       </AuthCard>
     </div>

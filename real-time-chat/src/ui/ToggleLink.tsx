@@ -14,7 +14,7 @@ const ToggleLink: React.FC<ToggleLinkProps> = ({ text, style, ...props }) => {
 
 const toggleLinkStyles: { [key: string]: React.CSSProperties } = {
   link: {
-    color: '#007bff',
+    color: '#5a3f31',
     cursor: 'pointer',
     fontWeight: '600',
     marginLeft: '5px',

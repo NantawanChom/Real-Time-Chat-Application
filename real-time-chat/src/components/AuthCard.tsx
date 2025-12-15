@@ -14,7 +14,7 @@ const cardStyles: { [key: string]: React.CSSProperties } = {
     width: '90%',
     padding: '50px 40px',
     borderRadius: '16px',
-    boxShadow: '0 15px 40px rgba(0, 0, 0, 0.05)',
+    boxShadow: '0 15px 40px #d8c3a5',
     backgroundColor: 'white',
     textAlign: 'center',
     display: 'flex',

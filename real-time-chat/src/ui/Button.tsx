@@ -29,13 +29,14 @@ const Button: React.FC<ButtonProps> = ({
 
   const variantStyles: { [key in ButtonVariant]: CSSProperties } = {
     primary: {
-      backgroundColor: '#007bff',
+      backgroundColor: '#5a3f31',
       color: 'white',
+      outline: 'none',
     },
     secondary: {
       backgroundColor: 'white',
-      color: '#007bff',
-      border: '1px solid #007bff',
+      color: '#b08969',
+      border: '1px solid #b08969',
       boxShadow: 'none',
     },
   };
