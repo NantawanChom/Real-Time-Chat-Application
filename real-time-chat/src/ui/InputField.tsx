@@ -32,7 +32,7 @@ const inputStyles: { [key: string]: React.CSSProperties } = {
     marginBottom: '8px',
     fontSize: '0.9em',
     color: '#444',
-    fontWeight: '500',
+    fontWeight: '700',
   },
 
   input: {

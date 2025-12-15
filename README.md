@@ -15,3 +15,11 @@ npm / pnpm create vite@latest my-react-app -- --template reac
 ```
 pnpm add -D @tailwindcss/postcss autoprefixer
 ```
+
+## Code Color Palette
+
+- #6a4a3c
+- #7b5a43
+- #5a3f31
+- #b08969
+- #d8c3a5
