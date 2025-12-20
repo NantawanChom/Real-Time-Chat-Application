@@ -3,7 +3,7 @@ import AuthPage from './pages/AuthPage';
 import './App.css';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import Dashboard from './pages/Dashboard';
+import ChatListPage from './pages/ChatListPage';
 
 function App() {
   interface ProtectedRouteProps {
@@ -22,7 +22,7 @@ function App() {
   const AuthRedirect: React.FC<ProtectedRouteProps> = ({ children }) => {
     const { isLoggedIn } = useAuth();
     if (isLoggedIn) {
-      return <Navigate to="/dashboard" replace />;
+      return <Navigate to="/chat" replace />;
     }
     return <>{children}</>;
   };
@@ -40,10 +40,10 @@ function App() {
             }
           />
           <Route
-            path="/dashboard"
+            path="/chat"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <ChatListPage />
               </ProtectedRoute>
             }
           />
