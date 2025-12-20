@@ -46,7 +46,7 @@ const AuthPage: React.FC = () => {
 
     // Simulate successful login/signup
     login();
-    navigate('/dashboard');
+    navigate('/chat');
   };
 
   return (

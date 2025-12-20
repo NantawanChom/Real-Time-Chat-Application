@@ -25,14 +25,18 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() =>
+    JSON.parse(localStorage.getItem('isLoggedIn') || 'false'),
+  );
 
   const login = (): void => {
     setIsLoggedIn(true);
+    localStorage.setItem('isLoggedIn', 'true');
     console.log('Logged In');
   };
   const logout = (): void => {
     setIsLoggedIn(false);
+    localStorage.setItem('isLoggedIn', 'false');
     console.log('Logged Out');
   };
 
