@@ -1,5 +1,27 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import type { ReactNode } from 'react';
+import { saveToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from '../utils/storage';
+
+interface AuthState {
+  isLoggedIn: boolean;
+}
+
+type AuthAction = { type: 'LOGIN' } | { type: 'LOGOUT' };
+
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  switch (action.type) {
+    case 'LOGIN':
+      saveToLocalStorage('isLoggedIn', 'true');
+      saveToLocalStorage('authToken', 'dummy-token');
+      return { isLoggedIn: true };
+    case 'LOGOUT':
+      saveToLocalStorage('isLoggedIn', 'false');
+      removeFromLocalStorage('authToken');
+      return { isLoggedIn: false };
+    default:
+      throw new Error(`Unhandled action type: ${(action as AuthAction).type}`);
+  }
+};
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -25,23 +47,15 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() =>
-    JSON.parse(localStorage.getItem('isLoggedIn') || 'false'),
-  );
+  const [state, dispatch] = useReducer(authReducer, {
+    isLoggedIn: JSON.parse(getFromLocalStorage('isLoggedIn') || 'false'),
+  });
 
-  const login = (): void => {
-    setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true');
-    console.log('Logged In');
-  };
-  const logout = (): void => {
-    setIsLoggedIn(false);
-    localStorage.setItem('isLoggedIn', 'false');
-    console.log('Logged Out');
-  };
+  const login = (): void => dispatch({ type: 'LOGIN' });
+  const logout = (): void => dispatch({ type: 'LOGOUT' });
 
   const value: AuthContextType = {
-    isLoggedIn,
+    isLoggedIn: state.isLoggedIn,
     login,
     logout,
   };

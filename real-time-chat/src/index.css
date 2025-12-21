@@ -7,7 +7,7 @@
   padding: 0 !important;
 }
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Nunito', 'Anuphan';
   line-height: 1.5;
   font-weight: 400;
 
@@ -80,6 +80,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+input::placeholder {
+  font-family: 'Nunito', 'Anuphan';
 }
 
 @media (prefers-color-scheme: light) {

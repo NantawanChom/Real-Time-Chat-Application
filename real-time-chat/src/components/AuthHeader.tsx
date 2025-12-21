@@ -20,13 +20,13 @@ const headerStyles: { [key: string]: React.CSSProperties } = {
     textAlign: 'center',
   },
   title: {
-    fontSize: '2em',
+    fontSize: '32px',
     fontWeight: '700',
     color: '#333',
     marginBottom: '10px',
   },
   subtitle: {
-    fontSize: '1em',
+    fontSize: '16px',
     color: '#666',
     lineHeight: '1.5',
   },
