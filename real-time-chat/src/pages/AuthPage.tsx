@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent, type ChangeEvent } from 'react';
+import React, { useState, type FormEvent, type ChangeEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -33,7 +33,7 @@ const AuthPage: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password || (!isLogin && !username)) {
+    if (!username || !password || (!isLogin && !email)) {
       setError(t('auth.fillAllFields'));
       return;
     }
@@ -44,7 +44,6 @@ const AuthPage: React.FC = () => {
       console.log('Signing up...');
     }
 
-    // Simulate successful login/signup
     login();
     navigate('/chat');
   };
@@ -62,20 +61,20 @@ const AuthPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={pageStyles.form}>
           {!isLogin && (
             <InputField
-              label={t('auth.username')}
-              type="text"
-              placeholder={t('auth.usernamePlaceholder')}
-              value={username}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+              label={t('auth.email')}
+              type="email"
+              placeholder={t('auth.emailPlaceholder')}
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               required
             />
           )}
           <InputField
-            label={t('auth.email')}
-            type="email"
-            placeholder={t('auth.emailPlaceholder')}
-            value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            label={t('auth.username')}
+            type="text"
+            placeholder={t('auth.usernamePlaceholder')}
+            value={username}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
             required
           />
 
@@ -123,12 +122,12 @@ const pageStyles: { [key: string]: React.CSSProperties } = {
   },
   toggleText: {
     marginTop: '30px',
-    fontSize: '0.9em',
+    fontSize: '16px',
     color: '#666',
   },
   errorText: {
     color: '#e74c3c',
-    marginBottom: '15px',
+    marginBottom: '16px',
     fontWeight: '500',
   },
 };

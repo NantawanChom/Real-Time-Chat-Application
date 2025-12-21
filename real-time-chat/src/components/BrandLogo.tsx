@@ -7,7 +7,7 @@ interface BrandLogoProps {
 
 const BrandLogo: React.FC<BrandLogoProps> = ({ size = 50, color = '#7b5a43' }) => {
   return (
-    <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+    <div style={{ textAlign: 'center' }}>
       <svg
         version="1.1"
         id="Layer_1"
@@ -16,7 +16,6 @@ const BrandLogo: React.FC<BrandLogoProps> = ({ size = 50, color = '#7b5a43' }) =
         x="0px"
         y="0px"
         viewBox="0 0 115.98 122.88"
-        style={{ enableBackground: 'new 0 0 115.98 122.88' }}
         xmlSpace="preserve"
         width={size}
         height={size}

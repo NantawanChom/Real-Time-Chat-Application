@@ -36,7 +36,9 @@ const Button: React.FC<ButtonProps> = ({
     secondary: {
       backgroundColor: 'white',
       color: '#b08969',
-      border: '1px solid #b08969',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: '#b08969',
       boxShadow: 'none',
     },
   };

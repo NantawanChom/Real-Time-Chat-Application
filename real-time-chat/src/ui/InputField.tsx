@@ -38,8 +38,10 @@ const inputStyles: { [key: string]: React.CSSProperties } = {
   input: {
     width: '100%',
     padding: '14px 16px',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: '#ddd',
     borderRadius: '8px',
-    border: '1px solid #ddd',
     backgroundColor: '#f9f9f9',
     fontSize: '1em',
     boxSizing: 'border-box',
