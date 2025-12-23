@@ -49,7 +49,7 @@ importers:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.6)
       baseline-browser-mapping:
-        specifier: ^2.9.11
+        specifier: 2.9.11
         version: 2.9.11
       eslint:
         specifier: 9.36.0

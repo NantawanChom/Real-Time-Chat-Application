@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Avatar from './Avatar';
-import Button from '../../ui/Button'; // ใช้ Button จาก UI ที่มีอยู่
+import Button from '../../ui/Button';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 interface User {
   name: string;
@@ -12,115 +14,150 @@ interface ChatListHeaderProps {
   user: User;
 }
 
-const dummyUsers: User[] = [
-  { name: 'John Doe', status: 'Online', avatarUrl: '' },
-  { name: 'Jane Smith', status: 'Offline', avatarUrl: '' },
-];
-
 const ChatListHeader: React.FC<ChatListHeaderProps> = ({ user }) => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleNewChat = () => {
-    setIsSearchOpen(true);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    const results = dummyUsers.filter((user) =>
-      user.name.toLowerCase().includes(query.toLowerCase()),
-    );
-    setSearchResults(results);
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
-  const handleSelectUser = (user: User) => {
-    alert(`Starting chat with ${user.name}`);
-    setIsSearchOpen(false);
-  };
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!isDropdownOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
     <div style={styles.container}>
-      <div style={styles.userInfo}>
-        <Avatar src={user.avatarUrl} alt={user.name} size={56} />
-        <div style={styles.UserDetails}>
-          <h3 style={styles.userName}>{user.name}</h3>
-          <p style={styles.userStatus}>{user.status}</p>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+        <Avatar src={user.avatarUrl} alt={user.name} size={56} isOnline />
+        <div>
+          <Button
+            variant="primary"
+            style={{
+              fontSize: '0.9em',
+              padding: '10px 15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+            }}
+          >
+            New Chat
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </Button>
         </div>
       </div>
 
-      <div style={styles.actions}>
-        <Button
-          variant="primary"
-          style={{
-            fontSize: '0.9em',
-            padding: '10px 15px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-          }}
-          onClick={handleNewChat}
-        >
-          New Chat
+      <div className="relative inline-block text-left">
+        <div style={{ cursor: 'pointer' }} onClick={toggleDropdown}>
           <svg
-            width="16"
-            height="16"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+            stroke="#5a3f31"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="text-gray-500"
           >
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
+            <circle cx="12" cy="12" r="1" fill="#5a3f31"></circle>
+            <circle cx="12" cy="5" r="1" fill="#5a3f31"></circle>
+            <circle cx="12" cy="19" r="1" fill="#5a3f31"></circle>
           </svg>
-        </Button>
-        <button style={styles.iconButton}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#007bff"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        </div>
+        {isDropdownOpen && (
+          <div
+            className="absolute right-0 mt-2 w-44 origin-top-right bg-white rounded-xl shadow-xl z-50 py-1.5 animate-in fade-in zoom-in-95 duration-100"
+            style={styles.dropdownCenterWrapper}
+            ref={dropdownRef}
           >
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="16"></line>
-            <line x1="8" y1="12" x2="16" y2="12"></line>
-          </svg>
-        </button>
-      </div>
-
-      {isSearchOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
-            <input
-              type="text"
-              placeholder="Search for a user..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              style={styles.searchInput}
-            />
-            <ul style={styles.searchResults}>
-              {searchResults.map((user) => (
-                <li
-                  key={user.name}
-                  style={styles.searchResultItem}
-                  onClick={() => handleSelectUser(user)}
+            <div style={styles.dropdrownMenu}>
+              <button
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                }}
+                className="flex w-full items-center px-4 py-2 justify-center"
+                style={styles.buttonDropdown}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  className="w-4 h-4 mr-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  {user.name}
-                </li>
-              ))}
-            </ul>
-            <button onClick={() => setIsSearchOpen(false)} style={styles.closeButton}>
-              Close
-            </button>
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.72V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.17a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                ตั้งค่า
+              </button>
+
+              <div className="border-t" style={styles.separatorLine}></div>
+
+              <button
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  handleLogout();
+                }}
+                className="flex w-full items-center px-4 py-2 justify-center"
+                style={styles.buttonDropdown}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mr-3 w-4 h-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                ออกจากระบบ
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
@@ -138,87 +175,28 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '10px 20px',
     boxShadow: '0 2px 5px rgba(0,0,0,0.02)',
   },
-  userInfo: {
-    display: 'flex',
-    alignItems: 'center',
+  dropdownCenterWrapper: {
+    left: '50%',
+    transform: 'translateX(-50%)',
   },
-  UserDetails: {
-    marginLeft: '15px',
-  },
-  userName: {
-    margin: '0 0 4px 0',
-    fontSize: '1.2em',
-    fontWeight: '700',
-    color: '#333',
-  },
-  userStatus: {
-    margin: 0,
-    fontSize: '0.9em',
-    color: '#999',
-  },
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-  },
-  iconButton: {
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    padding: '5px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalOverlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: '20px',
+  dropdrownMenu: {
+    backgroundColor: '#d8c3a5',
+    padding: '6px',
     borderRadius: '8px',
-    width: '90%',
-    maxWidth: '400px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    border: '1px solid #b08969',
   },
-  searchInput: {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    marginBottom: '10px',
-  },
-  searchResults: {
-    listStyleType: 'none',
-    padding: 0,
-    margin: 0,
-  },
-  searchResultItem: {
-    padding: '10px',
-    borderRadius: '4px',
+  buttonDropdown: {
+    padding: '8px 12px',
+    whiteSpace: 'nowrap',
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    border: 0,
+    backgroundColor: '#d8c3a5',
+    color: '#5a3f31',
+    fontSize: '16px',
+    fontWeight: 600,
   },
-  searchResultItemHovered: {
-    backgroundColor: '#f0f0f0',
-  },
-  closeButton: {
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    padding: '10px',
-    cursor: 'pointer',
-    width: '100%',
+  separatorLine: {
+    color: '#6a4a3c',
   },
 };
 
