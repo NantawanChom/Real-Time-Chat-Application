@@ -4,6 +4,15 @@ import { useTranslation } from 'react-i18next';
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
 
+  React.useEffect(() => {
+    const savedLanguage = localStorage.getItem('i18nextLng');
+    if (savedLanguage && savedLanguage.startsWith('en')) {
+      i18n.changeLanguage('en');
+    } else {
+      i18n.changeLanguage('th');
+    }
+  }, [i18n]);
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };

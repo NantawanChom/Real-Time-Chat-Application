@@ -131,8 +131,16 @@ const ChatListPage: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log('First load - clearing localStorage');
+    // Clear activeChatId and allMessages on first load
+    setActiveChatId(null);
+    setAllMessages({});
+  }, []);
+
+  useEffect(() => {
     const savedActiveChatId = localStorage.getItem('activeChatId');
     const savedMessages = localStorage.getItem('allMessages');
+    console.log('Loaded from localStorage:', savedActiveChatId, savedMessages);
 
     if (savedActiveChatId) {
       setActiveChatId(savedActiveChatId);
@@ -143,12 +151,12 @@ const ChatListPage: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (activeChatId) {
-      localStorage.setItem('activeChatId', activeChatId);
-    }
-    localStorage.setItem('allMessages', JSON.stringify(allMessages));
-  }, [activeChatId, allMessages]);
+  // useEffect(() => {
+  //   if (activeChatId) {
+  //     localStorage.setItem('activeChatId', activeChatId);
+  //   }
+  //   localStorage.setItem('allMessages', JSON.stringify(allMessages));
+  // }, [activeChatId, allMessages]);
 
   return (
     <div style={styles.pageContainer}>
@@ -173,6 +181,7 @@ const ChatListPage: React.FC = () => {
       <div style={styles.chatArea}>
         {activeChat ? (
           <>
+            {/* Chat content when a chat is selected */}
             <div style={styles.chatHeader}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 <Avatar src={activeChat.avatarUrl} size={42} />
@@ -227,8 +236,8 @@ const ChatListPage: React.FC = () => {
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
               </div>
-              <h2 style={{ color: '#bbb', fontWeight: '500' }}>ยินดีต้อนรับสู่แชท</h2>
-              <p style={{ color: '#ccc' }}>เลือกเพื่อนจากด้านซ้ายเพื่อเริ่มสนทนา</p>
+              <h2 style={{ color: '#bbb', fontWeight: '500' }}>Welcome to Chat</h2>
+              <p style={{ color: '#ccc' }}>Select a conversation from the left to start chatting</p>
             </div>
           </div>
         )}
@@ -242,8 +251,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     height: '100vh',
     width: '100vw',
-    backgroundColor: '#fff',
+    backgroundColor: '#d8c3a5',
     overflow: 'hidden',
+    margin: 0,
+    padding: 0,
+    boxSizing: 'border-box',
   },
   sidebar: {
     width: '380px',
@@ -256,6 +268,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
+    boxSizing: 'border-box',
   },
   sectionTitle: {
     fontSize: '1.1em',
@@ -273,6 +286,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     backgroundColor: '#f8f9fb',
     height: '100%',
+    overflow: 'hidden',
   },
   chatHeader: {
     position: 'sticky',
@@ -294,6 +308,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     overflowY: 'auto',
     display: 'flex',
     flexDirection: 'column',
+    boxSizing: 'border-box',
   },
   placeholder: {
     flex: 1,
