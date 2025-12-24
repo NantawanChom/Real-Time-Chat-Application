@@ -54,7 +54,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '5px',
   },
   activeContainer: {
-    backgroundColor: '#eef2ff',
+    backgroundColor: '#d8c3a5',
   },
   content: {
     marginLeft: '15px',
@@ -75,7 +75,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   time: {
     fontSize: '0.85em',
-    color: '#999',
+    color: '#d8c3a5',
   },
   footer: {
     display: 'flex',
@@ -93,7 +93,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginRight: '10px',
   },
   badge: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#7b5a43',
     color: 'white',
     fontSize: '0.8em',
     fontWeight: 'bold',

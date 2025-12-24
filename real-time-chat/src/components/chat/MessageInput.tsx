@@ -69,7 +69,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   iconBtn: { background: 'none', border: 'none', fontSize: '1.5em', cursor: 'pointer' },
   sendBtn: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#5a3f31',
     color: 'white',
     border: 'none',
     width: '45px',
