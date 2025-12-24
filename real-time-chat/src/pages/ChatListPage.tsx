@@ -100,64 +100,6 @@ const ChatListPage: React.FC = () => {
   const activeChat = dummyConversations.find((c) => c.id === activeChatId);
   const currentMessages = activeChatId ? allMessages[activeChatId] || [] : [];
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
-
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-
-  const handleLogout = () => {
-    setActiveChatId(null);
-    setAllMessages({});
-    logout();
-    navigate('/login');
-  };
-
-  const handleDeleteChat = () => {
-    if (activeChatId) {
-      const updatedMessages = { ...allMessages };
-      delete updatedMessages[activeChatId];
-      setAllMessages(updatedMessages);
-      setActiveChatId(null);
-      alert('Chat deleted successfully');
-    }
-  };
-
-  const handleMarkAsUnread = () => {
-    alert('Marked as unread');
-  };
-
-  useEffect(() => {
-    console.log('First load - clearing localStorage');
-    // Clear activeChatId and allMessages on first load
-    setActiveChatId(null);
-    setAllMessages({});
-  }, []);
-
-  useEffect(() => {
-    const savedActiveChatId = localStorage.getItem('activeChatId');
-    const savedMessages = localStorage.getItem('allMessages');
-    console.log('Loaded from localStorage:', savedActiveChatId, savedMessages);
-
-    if (savedActiveChatId) {
-      setActiveChatId(savedActiveChatId);
-    }
-
-    if (savedMessages) {
-      setAllMessages(JSON.parse(savedMessages));
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   if (activeChatId) {
-  //     localStorage.setItem('activeChatId', activeChatId);
-  //   }
-  //   localStorage.setItem('allMessages', JSON.stringify(allMessages));
-  // }, [activeChatId, allMessages]);
-
   return (
     <div style={styles.pageContainer}>
       <div style={styles.sidebar}>
@@ -187,28 +129,10 @@ const ChatListPage: React.FC = () => {
                 <Avatar src={activeChat.avatarUrl} size={42} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '1.1em' }}>{activeChat.name}</h4>
-                  <span style={{ fontSize: '0.8em', color: '#2ecc71', fontWeight: '600' }}>
+                  <span style={{ fontSize: '0.8em', color: '#2E8B57', fontWeight: '600' }}>
                     Online
                   </span>
                 </div>
-              </div>
-              <div style={{ position: 'relative' }}>
-                <button style={styles.iconButton} onClick={toggleDropdown}>
-                  ⋮
-                </button>
-                {isDropdownOpen && (
-                  <div style={styles.dropdownMenu}>
-                    <button style={styles.dropdownItem} onClick={handleLogout}>
-                      Logout
-                    </button>
-                    <button style={styles.dropdownItem} onClick={handleDeleteChat}>
-                      Delete Chat
-                    </button>
-                    <button style={styles.dropdownItem} onClick={handleMarkAsUnread}>
-                      Mark as Unread
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
 

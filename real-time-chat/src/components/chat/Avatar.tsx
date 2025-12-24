@@ -40,7 +40,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     right: '2px',
     width: '12px',
     height: '12px',
-    backgroundColor: '#2ecc71',
+    backgroundColor: '#2E8B57',
     borderRadius: '50%',
     border: '2px solid white',
   },

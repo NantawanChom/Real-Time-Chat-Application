@@ -29,7 +29,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     gap: '4px',
   },
-  myBubble: { backgroundColor: '#007bff', color: 'white', borderBottomRightRadius: '4px' },
+  myBubble: { backgroundColor: '#6a4a3c', color: 'white', borderBottomRightRadius: '4px' },
   theirBubble: { backgroundColor: '#f0f2f5', color: '#333', borderBottomLeftRadius: '4px' },
   time: { fontSize: '0.75em', alignSelf: 'flex-end' },
 };
