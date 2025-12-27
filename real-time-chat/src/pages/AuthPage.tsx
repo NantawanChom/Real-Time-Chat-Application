@@ -1,7 +1,7 @@
-import React, { useState, type FormEvent, type ChangeEvent, useEffect } from 'react';
+import React, { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../stores/authStore';
 import AuthCard from '../components/AuthCard';
 import BrandLogo from '../components/BrandLogo';
 import AuthHeader from '../components/AuthHeader';
@@ -12,7 +12,7 @@ import ToggleLink from '../ui/ToggleLink';
 
 const AuthPage: React.FC = () => {
   const { t } = useTranslation();
-  const { login } = useAuth();
+  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -44,7 +44,14 @@ const AuthPage: React.FC = () => {
       console.log('Signing up...');
     }
 
-    login();
+    // mock user object
+    const user = {
+      id: email || username,
+      name: username,
+      email: email,
+      avatarUrl: '',
+    };
+    login(user);
     navigate('/chat');
   };
 
