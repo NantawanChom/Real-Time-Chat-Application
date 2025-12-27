@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Avatar from './Avatar';
 import Button from '../../ui/Button';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../stores/authStore';
 
 interface User {
   name: string;
@@ -18,7 +18,7 @@ const ChatListHeader: React.FC<ChatListHeaderProps> = ({ user }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const logout = useAuthStore((state) => state.logout);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);

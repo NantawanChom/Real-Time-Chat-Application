@@ -1,7 +1,4 @@
-// src/pages/ChatListPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import ChatListHeader from '../components/chat/ChatListHeader';
 import SearchBar from '../components/chat/SearchBar';
 import ConversationItem, { type Conversation } from '../components/chat/ConversationItem';

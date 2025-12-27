@@ -2,7 +2,7 @@ import React, { type ReactNode } from 'react';
 import AuthPage from './pages/AuthPage';
 import './App.css';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { useAuthStore } from './stores/authStore';
 import ChatListPage from './pages/ChatListPage';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
   }
 
   const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isLoggedIn } = useAuth();
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     if (!isLoggedIn) {
       return <Navigate to="/login" replace />;
     }
@@ -20,7 +20,7 @@ function App() {
   };
 
   const AuthRedirect: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isLoggedIn } = useAuth();
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     if (isLoggedIn) {
       return <Navigate to="/chat" replace />;
     }
