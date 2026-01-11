@@ -1,9 +1,9 @@
 import React, { type ReactNode } from 'react';
-import AuthPage from './pages/AuthPage';
+const AuthPage = React.lazy(() => import('./pages/AuthPage'));
 import './App.css';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
-import ChatListPage from './pages/ChatListPage';
+const ChatListPage = React.lazy(() => import('./pages/ChatListPage'));
 
 function App() {
   interface ProtectedRouteProps {
@@ -29,31 +29,35 @@ function App() {
 
   return (
     <div style={appContainerStyle}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <AuthRedirect>
-                <AuthPage />
-              </AuthRedirect>
-            }
-          />
-          <Route
-            path="/chat"
-            element={
-              <ProtectedRoute>
-                <ChatListPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route
-            path="*"
-            element={<h1 style={{ textAlign: 'center', marginTop: '100px' }}>404 Not Found</h1>}
-          />
-        </Routes>
-      </BrowserRouter>
+      <React.Suspense
+        fallback={<div style={{ textAlign: 'center', marginTop: '100px' }}>Loading...</div>}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <AuthRedirect>
+                  <AuthPage />
+                </AuthRedirect>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <ChatListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route
+              path="*"
+              element={<h1 style={{ textAlign: 'center', marginTop: '100px' }}>404 Not Found</h1>}
+            />
+          </Routes>
+        </BrowserRouter>
+      </React.Suspense>
     </div>
   );
 }
